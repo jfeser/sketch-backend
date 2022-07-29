@@ -3,6 +3,7 @@
 //
 
 #include "BenchmarkScore.h"
+#include <algorithm>
 #include <iostream>
 #include <vector>
 #include <iomanip>
