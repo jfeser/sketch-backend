@@ -42,14 +42,14 @@ public:
 		BooleanDAG* newdag = dag->clone();
 		vector<bool_node*> inodeList = newdag->getNodesByType(type);
 
-		// cout<<" * Specializing problem for "<<(type == bool_node::CTRL? "controls" : "inputs")<<endl; 
+		// cout<<" * Specializing problem for "<<(type == bool_node::CTRL? "controls" : "inputs")<<endl;
 		cout << " * Before specialization: nodes = " << newdag->size() << " Ctrls = " << inodeList.size() << endl;
 		{
-			DagOptim cse(*newdag, floats);			
+			DagOptim cse(*newdag, floats);
 
 			BooleanDAG* cl = newdag->clone();
 			for (int i = 0; i<newdag->size(); ++i) {
-				// Get the code for this node.				
+				// Get the code for this node.
 				if ((*newdag)[i] != nullptr) {
 					if ((*newdag)[i]->type == bool_node::CTRL) {
 						INTER_node* inode = dynamic_cast<INTER_node*>((*newdag)[i]);
@@ -277,7 +277,7 @@ BooleanDAG* InterpreterEnvironment::prepareMiter(BooleanDAG* spec, BooleanDAG* s
 				delete spec;
 				throw bc;
 			}
-			
+
 
 			/*
 			ComplexInliner cse(*sketch, function_map, params.inlineAmnt, params.mergeFunctions );
@@ -296,7 +296,7 @@ BooleanDAG* InterpreterEnvironment::prepareMiter(BooleanDAG* spec, BooleanDAG* s
 				delete spec;
 				throw bc;
 			}
-			
+
 
 			/*
 			ComplexInliner cse(*spec, function_map,  params.inlineAmnt, params.mergeFunctions  );
@@ -308,7 +308,7 @@ BooleanDAG* InterpreterEnvironment::prepareMiter(BooleanDAG* spec, BooleanDAG* s
 	//spec->repOK();
 	//sketch->repOK();
 	Assert(spec->getNodesByType(bool_node::CTRL).size() == 0, "ERROR: Spec should not have any holes!!!");
-  
+
   if(false){
 		/* Eliminates uninterpreted functions */
 		DagElimUFUN eufun;
@@ -330,7 +330,7 @@ BooleanDAG* InterpreterEnvironment::prepareMiter(BooleanDAG* spec, BooleanDAG* s
 	//At this point spec and sketch may be inconsistent, because some nodes in spec will have nodes in sketch as their children.
 	spec->makeMiter(sketch);
 	BooleanDAG* result = spec;
-	
+
 	if (params.verbosity > 6) { cout << "after Creating Miter: Problem nodes = " << result->size() << endl; }
 
 
@@ -350,7 +350,7 @@ bool_node* createTupleSrcNode(string tuple_name, string node_name, int depth, ve
 	TUPLE_CREATE_node* new_node = TUPLE_CREATE_node::create(tuple_type->entries.size());
 	new_node->depth = depth;
 	new_node->setName(tuple_name);
-	
+
 	for (int j = 0; j < size; j++) {
 		stringstream str;
 		str << node_name << "_" << j;
@@ -400,7 +400,7 @@ bool_node* createTupleSrcNode(string tuple_name, string node_name, int depth, ve
 
 	if (ufun) return new_node;
 
-	
+
 	stringstream str;
 	str << node_name << "__";
 
@@ -409,7 +409,7 @@ bool_node* createTupleSrcNode(string tuple_name, string node_name, int depth, ve
 	newnodes.push_back(src);
 
 	ARRACC_node* ac = ARRACC_node::create(src, cnode, new_node);
-	
+
 	ac->addToParents();
 	newnodes.push_back(ac);
 	return ac;
@@ -571,7 +571,7 @@ void InterpreterEnvironment::doInline(
 //    {
 //        assert(dag[i]->get_name() != "num_bools_4_0_0");
 //    }
-	
+
 }
 
 
@@ -584,24 +584,24 @@ ClauseExchange::ClauseExchange(MiniSATSolver* ms, const string& inf, const strin
 
 	//Wipe the files clean
 	{
-	FILE* f = fopen(infile.c_str(), "w");	
+	FILE* f = fopen(infile.c_str(), "w");
 	fclose(f);
 	}
 	{
-	FILE* f = fopen(outfile.c_str(), "w");	
+	FILE* f = fopen(outfile.c_str(), "w");
 	fclose(f);
-	}	
+	}
 }
 
 void ClauseExchange::exchange(){
 	analyzeLocal();
 	int ssize = single.size();
-	int dsize = dble.size();	
+	int dsize = dble.size();
 	if (PARAMS->verbosity > 8) {
 		cout << "Before readInfile" << endl;
 		printToExchange();
 	}
-	
+
 
 	readInfile();
 
@@ -725,7 +725,7 @@ void ClauseExchange::pushOutfile(){
 
 void ClauseExchange::analyzeLocal(){
 	single.clear(); dble.clear();
-	msat->getShareable(single, dble, baseline);	
+	msat->getShareable(single, dble, baseline);
 }
 
 
@@ -966,12 +966,12 @@ int InterpreterEnvironment::doallpairs() {
 SATSolverResult InterpreterEnvironment::assertDAGNumerical(BooleanDAG* harness->get_dag(), ostream& out) {
     Assert(status==READY, "You can't do this if you are UNSAT");
     ++assertionStep;
-	
+
 	IntToFloatRewriteDag rewriter = IntToFloatRewriteDag(*harness->get_dag(), floats);
 	BooleanDAG* new_dag = rewriter.rewrite();
 
     reasSolver->addProblem(new_dag);
-       	
+
     int solveCode = 0;
     try{
         solveCode = reasSolver->solve();
@@ -988,10 +988,10 @@ SATSolverResult InterpreterEnvironment::assertDAGNumerical(BooleanDAG* harness->
         return SAT_UNSATISFIABLE;
     }
     if( !solveCode ){
-        status=UNSAT;				
+        status=UNSAT;
         return SAT_UNSATISFIABLE;
     }
-    
+
     return SAT_SATISFIABLE;
 }
 */
@@ -1205,10 +1205,10 @@ SATSolverResult InterpreterEnvironment::assertDAG(BooleanDAG *dag, ostream &out,
 		solver->setup2QBF(out);
 	}
 
-	if (dag->useSymbolic()) {		
+	if (dag->useSymbolic()) {
 		DeductiveSolver deductive(dag, this->floats);
-		deductive.symbolicSolve(*this->finder);	
-		
+		deductive.symbolicSolve(*this->finder);
+
 
 		solver->ctrlStore.synths.clear();
 		auto end = this->finder->get_sins().end();
@@ -1276,9 +1276,9 @@ int InterpreterEnvironment::assertDAG_wrapper(BooleanDAG* dag, const char* fileN
 	return assertDAG(dag, out, "");
 }
 
-BooleanDAG* InterpreterEnvironment::runOptims(BooleanDAG* result){		
+BooleanDAG* InterpreterEnvironment::runOptims(BooleanDAG* result){
 	if (params.olevel >= 3) {
-		DagOptim cse(*result, floats);	
+		DagOptim cse(*result, floats);
 		//cse.alterARRACS();
 		cse.process(*result);
 	}
@@ -1293,20 +1293,18 @@ BooleanDAG* InterpreterEnvironment::runOptims(BooleanDAG* result){
 
 
 
-	if (false && params.olevel >= 5) {
+	if (params.olevel >= 8) {
 		BackwardsAnalysis opt;
-		cout << "BEFORE ba: " << endl;
-		//result->print(cout);
+		cout << "BEFORE ba: " << result->size() << endl;
 		opt.process(*result);
-		cout << "AFTER ba: " << endl;
-		// result->print(cout);
+		cout << "AFTER ba: " << result->size() << endl;
 	}
 	// result->repOK();
 	if (params.olevel >= 7) {
-		cout << "BEFORE OptimizeCommutAssoc" << result->size() << endl;
+		cout << "BEFORE OptimizeCommutAssoc: " << result->size() << endl;
 		DagOptimizeCommutAssoc opt;
 		opt.process(*result);
-		cout << "AFTER OptimizeCommutAssoc " << result->size() << endl;
+		cout << "AFTER OptimizeCommutAssoc: " << result->size() << endl;
 	}
 	// result->repOK();
 	//result->print(cout) ;
@@ -1314,14 +1312,14 @@ BooleanDAG* InterpreterEnvironment::runOptims(BooleanDAG* result){
 	// cout<<"* after CAoptim: Problem nodes = "<<result->size()<<endl;
 
 	if (params.olevel >= 4) {
-		DagOptim cse(*result, floats);	
+		DagOptim cse(*result, floats);
 		if (params.alterARRACS) {
 			cout << " alterARRACS" << endl;
 			cse.alterARRACS();
 		}
 		cse.process(*result);
 	}
-	// result->repOK();	
+	// result->repOK();
 	if (params.verbosity > 0) { cout << "* Final Problem size: Problem nodes = " << result->size() << endl; }
 	if (params.showDAG) {
 		result->lprint(cout);
@@ -1385,11 +1383,11 @@ void InterpreterEnvironment::abstractNumericalPart(BooleanDAG& dag) {
   vector<bool_node*> funparents;
   vector<bool_node*> tuplecparents;
   vector<TUPLE_R_node*> trnodes;
-  
+
   BooleanDAG* funDag = new BooleanDAG(fname); // store the abstraction in this dag
-  
+
   set<bool_node*> funNodes;
-  
+
   for(int i=0; i<dag.size() ; ++i ) {
     bool_node* node = dag[i];
     if (seenNodes.find(node) == seenNodes.end()) {
@@ -1398,8 +1396,8 @@ void InterpreterEnvironment::abstractNumericalPart(BooleanDAG& dag) {
       int nid = node->id;
       OutType* type = node->getOtype();
       //cout << dagclone[nid]->lprint() << endl;
-      
-      
+
+
       if (type == OutType::INT || type == OutType::BOOL  ) {
         bool hasFlChild = hasFloatChild(node);
         bool hasFlInputs = hasFloatInputs(dagclone[nid]);
@@ -1407,7 +1405,7 @@ void InterpreterEnvironment::abstractNumericalPart(BooleanDAG& dag) {
           if (hasFlInputs) {
 			  CTRL_node* ctrl =  CTRL_node::create(); // TODO: this ctrl should be angelic
 			  ctrl->name = "CTRL_" + std::to_string(seenNodes.size());
-          
+
 			  int nbits = 0;
 			  if (type == OutType::BOOL || type == OutType::BOOL_ARR) {
 				nbits = 1;
@@ -1415,9 +1413,9 @@ void InterpreterEnvironment::abstractNumericalPart(BooleanDAG& dag) {
 			  if (type == OutType::INT || type == OutType::INT_ARR) {
 				nbits = 5;
 			  }
-          
+
 			  ctrl->set_nbits(nbits);
-          
+
 			  if(type == OutType::INT_ARR || type == OutType::BOOL_ARR) {
 				ctrl->setArr(PARAMS->angelic_arrsz);
 			  }
@@ -1426,9 +1424,9 @@ void InterpreterEnvironment::abstractNumericalPart(BooleanDAG& dag) {
           } else {
 			  funparents.push_back(node);
           }
-          
-        
-      
+
+
+
           SRC_node* src =  SRC_node::create("PARAM_" + std::to_string(seenNodes.size()));
           int nbits = 0;
           if (type == OutType::BOOL || type == OutType::BOOL_ARR) {
@@ -1437,14 +1435,14 @@ void InterpreterEnvironment::abstractNumericalPart(BooleanDAG& dag) {
           if (type == OutType::INT || type == OutType::INT_ARR) {
             nbits = 2;
           }
-          
+
           if (nbits > 1) { nbits = PARAMS->NANGELICS; }
           src->set_nbits(nbits);
           if(type == OutType::INT_ARR || type == OutType::BOOL_ARR) {
             int sz = 1 << PARAMS->NINPUTS;
             src->setArr(sz);
           }
-          
+
           funNodes.insert(src);
           dagclone[nid]->neighbor_replace(src);
         }
@@ -1452,7 +1450,7 @@ void InterpreterEnvironment::abstractNumericalPart(BooleanDAG& dag) {
           funNodes.insert(dagclone[nid]);
 		  tuplecparents.push_back(dagclone[nid]);
           TUPLE_R_node* tnode = TUPLE_R_node::create();
-          tnode->idx = rettypes.size();                    
+          tnode->idx = rettypes.size();
 		  trnodes.push_back(tnode);
           newnodes.push_back(tnode);
           dag.replace(nid, tnode);
@@ -1469,7 +1467,7 @@ void InterpreterEnvironment::abstractNumericalPart(BooleanDAG& dag) {
             an->addToParents();
             newnodes.push_back(an);
             dag.assertions.append(getDllnode(an));
-            
+
           }
         }
       }
@@ -1489,7 +1487,7 @@ void InterpreterEnvironment::abstractNumericalPart(BooleanDAG& dag) {
   unode->outname = "_p_out_" + fname;
   unode->set_tupleName(fname);
   unode->set_nbits(0);
-  unode->ignoreAsserts = true; // This is ok because the code represented by this ufun has no asserts.  
+  unode->ignoreAsserts = true; // This is ok because the code represented by this ufun has no asserts.
   unode->mother() = op.getCnode(1);
 
   for (auto it = trnodes.begin(); it != trnodes.end(); ++it) {
@@ -1513,12 +1511,12 @@ void InterpreterEnvironment::abstractNumericalPart(BooleanDAG& dag) {
   numericalAbsMap[fname] = funDag;
   funDag->lprint(cout);
   dag.addNewNodes(newnodes);
-  op.cleanup(dag);  
+  op.cleanup(dag);
   //dag.lprint(cout);
   //funDag->repOK();
-  
+
   finder->setNumericalAbsMap(numericalAbsMap);
-  
+
 }
 
 
@@ -1894,4 +1892,3 @@ rm cur
 
 
  */
-
